@@ -1,11 +1,28 @@
-﻿// Streams.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
-
+﻿
 #include <iostream>
+#include "FileGapsRemover.h"
 
+using namespace std;
 int main()
 {
-    std::cout << "Hello World!\n";
+    int code = remove_gaps(R"(C:\Users\Admin\Documents\input.txt)");
+	switch (code)
+	{
+	case -2:
+		cout << "File cannot be opened for writing";
+		break;
+	case -1:
+		cout << "File cannot be opened for reading";
+		break;
+	case 0:
+		cout << "No useful symbols found. File was not modified";
+		break;
+	case 1:
+		cout << "File was successfully modified or it was already good";
+		break;
+	default:
+		break;
+	}
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
