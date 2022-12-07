@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <fstream>
+#include <cstdio>
 //Opens file specified in "filename" parameter and deletes all extra gaps (double gaps and gaps at the beginning and the end of file)
 //filename - name of file to be modified
 //Returns values:

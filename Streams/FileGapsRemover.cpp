@@ -1,16 +1,16 @@
 #include "FileGapsRemover.h"
 #include <iostream> //for debugging
 int remove_gaps(std::string filename) {
-	std::ifstream fin(filename);
-	std::ofstream fout;
+	FILE** ifPtr = new FILE*;
+	fopen_s(ifPtr, filename.c_str(), "r");
 	std::string data;
 	char sym;
-	char pre = 'q'; //initialising "previous symbol" variable on random non-gap symbol (see 8 str.)
+	char pre = 'q'; //initialising "previous symbol" variable on random non-gap symbol 
 	bool beg = true; //indicates if current symbol is before beginning of useful part of file
-	if (!fin.is_open()) {
+	if (!ifPtr) {
 		return -1; //Cannot open file for reading
 	}
-	while (fin >> std::noskipws >> sym) {
+	while ((sym=fgetc(*ifPtr))!=EOF) {
 		if (beg && sym == ' ') {
 			continue; //gap in the beginning. Doing nothing
 		}
@@ -36,12 +36,16 @@ int remove_gaps(std::string filename) {
 	if (data[data.length() - 1] == ' ') {
 		data.pop_back(); //Deleting last symbol if it is gap
 	}
-	fin.close();
-	fout.open(filename);
-	if (!fout.is_open()) {
+	fclose(*ifPtr);
+	FILE** ofPtr = new FILE*;
+	fopen_s(ofPtr, filename.c_str(), "w");
+	if (!ofPtr) {
 		return -2; //Cannon open file for writing
 	}
-	fout << data;
-	fout.close();
+	for (auto i: data)
+	{
+		fputc(i, *ofPtr);
+	}
+	fclose(*ofPtr);
 	return 1; //OK
 }
